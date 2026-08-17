@@ -18,6 +18,9 @@ export default function Header() {
           <Link to="/about" className="text-sm font-medium text-slate-600 transition hover:text-slate-900">
             About
           </Link>
+          <Link to="/addJob" className="text-sm font-medium text-slate-600 transition hover:text-slate-900">
+            Add Job
+          </Link>
 
           <Show when="signed-out">
             <SignInButton mode="modal">
