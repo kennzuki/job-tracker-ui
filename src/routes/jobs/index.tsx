@@ -88,19 +88,17 @@ const STATUS_DOTS: Record<Status, string> = {
   closed: 'bg-gray-400',
 }
 
-export const Route = createFileRoute('/viewJobs')({
-  component: ViewJobsPage,
+export const Route = createFileRoute('/jobs/')({
+  component: JobsListPage,
 })
 
-function ViewJobsPage() {
+function JobsListPage() {
   const [jobList, setJobList] = useState<Job[]>(jobs)
 
   function handleDelete(id: string) {
     const confirmed = window.confirm('Delete this job entry? This cannot be undone.')
     if (!confirmed) return
 
-    // TODO: replace with your API call, e.g.
-    // await fetch(`/api/jobs/${id}`, { method: 'DELETE' })
     setJobList((prev) => prev.filter((job) => job.id !== id))
   }
 
@@ -118,7 +116,7 @@ function ViewJobsPage() {
             </h1>
           </div>
           <Link
-            to="/addJob"
+            to="/jobs/new"
             className="bg-blue-500 hover:bg-blue-600 text-white rounded-lg px-4 py-2.5 text-sm font-semibold transition-colors"
           >
             + New job
@@ -192,7 +190,7 @@ function ViewJobsPage() {
                         Link ↗
                       </a>
                       <Link
-                        to="/editJob/$jobId"
+                        to="/jobs/$jobId/edit"
                         params={{ jobId: job.id }}
                         className="text-blue-600 hover:text-blue-700"
                       >
@@ -201,7 +199,7 @@ function ViewJobsPage() {
                       <button
                         type="button"
                         onClick={() => handleDelete(job.id)}
-                        className="text-red-600 hover:text-red-700"
+                        className="cursor-pointer text-red-600 hover:text-red-700"
                       >
                         Delete
                       </button>
@@ -254,17 +252,17 @@ function ViewJobsPage() {
                 >
                   Link ↗
                 </a>
-                {/* <Link
-                  to="/editJob/$jobId"
+                <Link
+                  to="/jobs/$jobId/edit"
                   params={{ jobId: job.id }}
                   className="text-blue-600 hover:text-blue-700"
                 >
                   Edit
-                </Link> */}
+                </Link>
                 <button
                   type="button"
                   onClick={() => handleDelete(job.id)}
-                  className="text-red-600 hover:text-red-700 ml-auto"
+                  className="cursor-pointer text-red-600 hover:text-red-700 ml-auto"
                 >
                   Delete
                 </button>

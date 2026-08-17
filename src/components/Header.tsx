@@ -15,11 +15,14 @@ export default function Header() {
           <Link to="/" className="text-sm font-medium text-slate-600 transition hover:text-slate-900">
             Home
           </Link>
+          <Link to="/jobs" className="text-sm font-medium text-slate-600 transition hover:text-slate-900">
+            Jobs
+          </Link>
+          <Link to="/jobs/new" className="text-sm font-medium text-slate-600 transition hover:text-slate-900">
+            Add Job
+          </Link>
           <Link to="/about" className="text-sm font-medium text-slate-600 transition hover:text-slate-900">
             About
-          </Link>
-          <Link to="/addJob" className="text-sm font-medium text-slate-600 transition hover:text-slate-900">
-            Add Job
           </Link>
 
           <Show when="signed-out">
