@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { createFileRoute, Link } from '@tanstack/react-router'
+import { ExternalLink, Eye } from 'lucide-react'
 
-type Status = 'open' | 'applied' | 'interviewing' | 'offer' | 'rejected' | 'closed'
+export type Status = 'open' | 'applied' | 'interviewing' | 'offer' | 'rejected' | 'closed'
 
-type Job = {
+export type Job = {
   id: string
   title: string
   company: string
@@ -13,7 +14,7 @@ type Job = {
   createdAt: string
 }
 
-const jobs: Job[] = [
+export const SAMPLE_JOBS: Job[] = [
   {
     id: '1',
     title: 'Backend Engineer',
@@ -70,16 +71,16 @@ const jobs: Job[] = [
   },
 ]
 
-const STATUS_STYLES: Record<Status, string> = {
-  open: 'bg-slate-100 text-slate-600 border-slate-300',
-  applied: 'bg-blue-50 text-blue-600 border-blue-200',
-  interviewing: 'bg-amber-50 text-amber-700 border-amber-200',
-  offer: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-  rejected: 'bg-red-50 text-red-600 border-red-200',
-  closed: 'bg-gray-100 text-gray-500 border-gray-300',
+export const STATUS_STYLES: Record<Status, string> = {
+  open: 'bg-slate-100 text-slate-700 border-slate-300',
+  applied: 'bg-blue-50 text-blue-700 border-blue-200',
+  interviewing: 'bg-amber-50 text-amber-800 border-amber-200',
+  offer: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+  rejected: 'bg-red-50 text-red-700 border-red-200',
+  closed: 'bg-gray-100 text-gray-600 border-gray-300',
 }
 
-const STATUS_DOTS: Record<Status, string> = {
+export const STATUS_DOTS: Record<Status, string> = {
   open: 'bg-slate-400',
   applied: 'bg-blue-500',
   interviewing: 'bg-amber-500',
@@ -93,14 +94,7 @@ export const Route = createFileRoute('/jobs/')({
 })
 
 function JobsListPage() {
-  const [jobList, setJobList] = useState<Job[]>(jobs)
-
-  function handleDelete(id: string) {
-    const confirmed = window.confirm('Delete this job entry? This cannot be undone.')
-    if (!confirmed) return
-
-    setJobList((prev) => prev.filter((job) => job.id !== id))
-  }
+  const [jobList] = useState<Job[]>(SAMPLE_JOBS)
 
   return (
     <div className="min-h-screen bg-gray-100 text-gray-900 font-sans p-6 sm:p-10">
@@ -117,7 +111,7 @@ function JobsListPage() {
           </div>
           <Link
             to="/jobs/new"
-            className="bg-blue-500 hover:bg-blue-600 text-white rounded-lg px-4 py-2.5 text-sm font-semibold transition-colors"
+            className="bg-blue-500 hover:bg-blue-600 text-white rounded-lg px-4 py-2.5 text-sm font-semibold transition-colors shadow-sm"
           >
             + New job
           </Link>
@@ -127,7 +121,7 @@ function JobsListPage() {
         <div className="hidden md:block bg-white text-black border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-gray-200 text-left">
+              <tr className="border-b border-gray-200 text-left bg-gray-50/50">
                 <th className="font-medium text-gray-500 text-xs uppercase tracking-wide px-5 py-3.5">
                   Role
                 </th>
@@ -152,19 +146,18 @@ function JobsListPage() {
               {jobList.map((job) => (
                 <tr
                   key={job.id}
-                  className="border-b border-gray-100 last:border-b-0 hover:bg-gray-50 transition-colors"
+                  className="border-b border-gray-100 last:border-b-0 hover:bg-gray-50/80 transition-colors"
                 >
                   <td className="px-5 py-4 font-medium">
-                    <a
-                      href={job.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="hover:text-blue-600 hover:underline"
+                    <Link
+                      to="/jobs/$jobId"
+                      params={{ jobId: job.id }}
+                      className="text-slate-900 hover:text-blue-600 font-medium hover:underline"
                     >
                       {job.title}
-                    </a>
+                    </Link>
                   </td>
-                  <td className="px-5 py-4 text-gray-500">{job.company}</td>
+                  <td className="px-5 py-4 text-gray-600">{job.company}</td>
                   <td className="px-5 py-4 text-gray-500">{job.location}</td>
                   <td className="px-5 py-4">
                     <span
@@ -185,24 +178,18 @@ function JobsListPage() {
                         href={job.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-gray-500 hover:text-gray-700"
+                        className="inline-flex items-center gap-1 text-gray-500 hover:text-gray-700"
                       >
-                        Link ↗
+                        Link <ExternalLink className="w-3 h-3" />
                       </a>
                       <Link
-                        to="/jobs/$jobId/edit"
+                        to="/jobs/$jobId"
                         params={{ jobId: job.id }}
-                        className="text-blue-600 hover:text-blue-700"
+                        className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 font-semibold"
                       >
-                        Edit
+                        <Eye className="w-3.5 h-3.5" />
+                        View
                       </Link>
-                      <button
-                        type="button"
-                        onClick={() => handleDelete(job.id)}
-                        className="cursor-pointer text-red-600 hover:text-red-700"
-                      >
-                        Delete
-                      </button>
                     </div>
                   </td>
                 </tr>
@@ -220,14 +207,13 @@ function JobsListPage() {
             >
               <div className="flex items-start justify-between gap-3 mb-2">
                 <div>
-                  <a
-                    href={job.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-medium hover:text-blue-600 hover:underline"
+                  <Link
+                    to="/jobs/$jobId"
+                    params={{ jobId: job.id }}
+                    className="font-semibold text-slate-900 hover:text-blue-600 hover:underline"
                   >
                     {job.title}
-                  </a>
+                  </Link>
                   <div className="text-gray-500 text-sm">{job.company}</div>
                 </div>
                 <span
@@ -243,29 +229,23 @@ function JobsListPage() {
                 <span>{job.location}</span>
                 <span className="font-mono">{job.createdAt}</span>
               </div>
-              <div className="flex items-center gap-4 mt-3 pt-3 border-t border-gray-100 text-xs font-medium">
+              <div className="flex items-center justify-between gap-4 mt-3 pt-3 border-t border-gray-100 text-xs font-medium">
                 <a
                   href={job.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-500 hover:text-gray-700"
+                  className="inline-flex items-center gap-1 text-gray-500 hover:text-gray-700"
                 >
-                  Link ↗
+                  Link <ExternalLink className="w-3 h-3" />
                 </a>
                 <Link
-                  to="/jobs/$jobId/edit"
+                  to="/jobs/$jobId"
                   params={{ jobId: job.id }}
-                  className="text-blue-600 hover:text-blue-700"
+                  className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 font-semibold"
                 >
-                  Edit
+                  <Eye className="w-3.5 h-3.5" />
+                  View details
                 </Link>
-                <button
-                  type="button"
-                  onClick={() => handleDelete(job.id)}
-                  className="cursor-pointer text-red-600 hover:text-red-700 ml-auto"
-                >
-                  Delete
-                </button>
               </div>
             </div>
           ))}
