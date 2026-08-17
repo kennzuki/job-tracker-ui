@@ -9,10 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ViewJobsRouteImport } from './routes/viewJobs'
 import { Route as AddJobRouteImport } from './routes/addJob'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 
+const ViewJobsRoute = ViewJobsRouteImport.update({
+  id: '/viewJobs',
+  path: '/viewJobs',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AddJobRoute = AddJobRouteImport.update({
   id: '/addJob',
   path: '/addJob',
@@ -33,34 +39,45 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/addJob': typeof AddJobRoute
+  '/viewJobs': typeof ViewJobsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/addJob': typeof AddJobRoute
+  '/viewJobs': typeof ViewJobsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/addJob': typeof AddJobRoute
+  '/viewJobs': typeof ViewJobsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/addJob'
+  fullPaths: '/' | '/about' | '/addJob' | '/viewJobs'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/addJob'
-  id: '__root__' | '/' | '/about' | '/addJob'
+  to: '/' | '/about' | '/addJob' | '/viewJobs'
+  id: '__root__' | '/' | '/about' | '/addJob' | '/viewJobs'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   AddJobRoute: typeof AddJobRoute
+  ViewJobsRoute: typeof ViewJobsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/viewJobs': {
+      id: '/viewJobs'
+      path: '/viewJobs'
+      fullPath: '/viewJobs'
+      preLoaderRoute: typeof ViewJobsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/addJob': {
       id: '/addJob'
       path: '/addJob'
@@ -89,6 +106,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   AddJobRoute: AddJobRoute,
+  ViewJobsRoute: ViewJobsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
