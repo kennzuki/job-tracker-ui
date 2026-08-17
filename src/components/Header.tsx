@@ -1,4 +1,5 @@
 import { Link } from '@tanstack/react-router'
+import { SignInButton, SignUpButton, Show, UserButton } from '@clerk/tanstack-react-start'
 import ThemeToggle from './ThemeToggle'
 
 export default function Header() {
@@ -17,6 +18,23 @@ export default function Header() {
           <Link to="/about" className="text-sm font-medium text-slate-600 transition hover:text-slate-900">
             About
           </Link>
+
+          <Show when="signed-out">
+            <SignInButton mode="modal">
+              <button className="cursor-pointer text-sm font-medium text-slate-600 transition hover:text-slate-900">
+                Sign In
+              </button>
+            </SignInButton>
+            <SignUpButton mode="modal">
+              <button className="cursor-pointer rounded-full bg-emerald-600 px-3.5 py-1.5 text-sm font-medium text-white shadow-sm transition hover:bg-emerald-700">
+                Sign Up
+              </button>
+            </SignUpButton>
+          </Show>
+          <Show when="signed-in">
+            <UserButton />
+          </Show>
+
           <ThemeToggle />
         </div>
       </nav>
